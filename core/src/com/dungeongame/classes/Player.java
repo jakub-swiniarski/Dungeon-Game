@@ -12,10 +12,10 @@ public class Player extends Entity {
     public Player(){
         inventory = new int[10];
         rect = new Rectangle();
-        rect.x = 100;
-        rect.y = 100;
-        rect.width = 200;
-        rect.height = 200;
+        rect.x = 0;
+        rect.y = 0;
+        rect.width = 80;
+        rect.height = 80;
         img = new Texture(Gdx.files.internal("player.png"));
     }
     public void checkForInput(){
