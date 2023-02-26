@@ -32,6 +32,7 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.end();
 		player.checkForInput();
 		player.borderCheck();
+		stone.collisionCheck();
 	}
 	
 	@Override

@@ -16,20 +16,21 @@ public class Player extends Entity {
         rect.y = 0;
         rect.width = 80;
         rect.height = 80;
+        movingSpeed = 250;
         img = new Texture(Gdx.files.internal("player.png"));
     }
     public void checkForInput(){
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && !Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            rect.x -= 400 * Gdx.graphics.getDeltaTime();
+            rect.x -= movingSpeed * Gdx.graphics.getDeltaTime();
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)  && !Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            rect.x += 400 * Gdx.graphics.getDeltaTime();
+            rect.x += movingSpeed * Gdx.graphics.getDeltaTime();
         }
         if(Gdx.input.isKeyPressed(Input.Keys.UP) && !Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            rect.y += 400 * Gdx.graphics.getDeltaTime();
+            rect.y += movingSpeed * Gdx.graphics.getDeltaTime();
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)  && !Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            rect.y -= 400 * Gdx.graphics.getDeltaTime();
+            rect.y -= movingSpeed * Gdx.graphics.getDeltaTime();
         }
     }
     public void borderCheck(){
