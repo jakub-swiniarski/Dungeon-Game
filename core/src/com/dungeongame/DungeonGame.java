@@ -3,23 +3,54 @@ package com.dungeongame;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.dungeongame.classes.Player;
-import com.dungeongame.classes.Stone;
+import com.dungeongame.classes.entities.Player;
+import com.dungeongame.classes.blocks.Stone;
 
 public class DungeonGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Player player;
 	Texture background;
-	Stone stone;
+	BitmapFont font;
+	Stone[] stone = new Stone[40];
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		player = new Player();
 		background = new Texture(Gdx.files.internal("background.png"));
-		stone = new Stone();
+		font=new BitmapFont();
+		font.setColor(0,0,0,255);
+		for(int i=0; i<40; i++){
+			stone[i] = new Stone();
+		}
+		for(int i=0; i<32; i++){
+			if(i<16){
+				stone[i].rect.y=720-stone[i].rect.height;
+				stone[i].rect.x=i*stone[i].rect.width;
+			}
+			else{
+				stone[i].rect.y=0;
+				stone[i].rect.x=(i-16)*stone[i].rect.width;
+			}
+		}
+		for(int i=32; i<36; i++){
+			stone[i].rect.x=0;
+		}
+		stone[32].rect.y=560;
+		stone[33].rect.y=480;
+		stone[34].rect.y=80;
+		stone[35].rect.y=160;
+
+		for(int i=36; i<40; i++){
+			stone[i].rect.x=1280-stone[i].rect.width;
+		}
+		stone[36].rect.y=560;
+		stone[37].rect.y=480;
+		stone[38].rect.y=80;
+		stone[39].rect.y=160;
 	}
 
 	@Override
@@ -28,11 +59,16 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(background, 0, 0);
 		batch.draw(player.img,player.rect.x, player.rect.y);
-		batch.draw(stone.img, stone.rect.x, stone.rect.y);
+		for(int i=0; i<40; i++){
+			batch.draw(stone[i].img,stone[i].rect.x, stone[i].rect.y);
+		}
+		font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 715);
 		batch.end();
 		player.checkForInput();
-		player.borderCheck();
-		stone.collisionCheck();
+		//player.borderCheck();
+		for(int i=0; i<40; i++){
+			stone[i].collisionCheck();
+		}
 	}
 	
 	@Override
@@ -40,6 +76,8 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.dispose();
 		background.dispose();
 		player.img.dispose();
-		stone.img.dispose();
+		for(int i=0; i<40; i++){
+			stone[i].img.dispose();
+		}
 	}
 }
