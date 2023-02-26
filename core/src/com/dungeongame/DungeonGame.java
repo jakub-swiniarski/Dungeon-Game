@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeongame.classes.entities.Player;
 import com.dungeongame.classes.blocks.Stone;
+import com.dungeongame.classes.items.Torch;
 import com.dungeongame.classes.ui.Heart;
 import com.dungeongame.classes.ui.Inventory;
 import com.dungeongame.classes.ui.InventoryPointer;
@@ -27,10 +28,11 @@ public class DungeonGame extends ApplicationAdapter {
 	World world;
 	RayHandler rayHandler;
 	Stage stage;
-	PointLight light;
 	Heart[] heart = new Heart[5];
 	Inventory playerInv;
 	InventoryPointer invPointer;
+	Torch torch;
+	Texture toDraw;
 
 	@Override
 	public void create () {
@@ -74,8 +76,9 @@ public class DungeonGame extends ApplicationAdapter {
 			heart[i].rect.x=10+i*heart[i].rect.width;
 		}
 
-		playerInv = new Inventory();
+		torch = new Torch();
 
+		playerInv = new Inventory();
 		invPointer = new InventoryPointer();
 
 		//lightning
@@ -83,7 +86,9 @@ public class DungeonGame extends ApplicationAdapter {
 		world = new World(new Vector2(0,0),false);
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(stage.getCamera().combined);
-		light = new PointLight(rayHandler,1000, Color.ORANGE,500,player.rect.x+player.rect.width/2, player.rect.y+player.rect.height/2);
+		torch.light = new PointLight(rayHandler,1000, Color.ORANGE,torch.brightness, 9999,9999);
+		//player.light[0] = new PointLight(rayHandler,1000, Color.WHITE,player.rect.x, player.rect.y);
+		//player.light[1] = new PointLight(rayHandler,1000, Color.WHITE,player.rect.x+10, player.rect.y);
 	}
 
 	@Override
@@ -95,9 +100,23 @@ public class DungeonGame extends ApplicationAdapter {
 			batch.draw(stone[i].img,stone[i].rect.x, stone[i].rect.y);
 		}
 		batch.draw(player.img,player.rect.x, player.rect.y);
+		if(torch.slot!=5){
+			if(torch.slot==player.currentSlot){
+				if(!torch.lightReset){
+					torch.brightness=400;
+					torch.lightReset=true;
+				}
+				batch.draw(torch.img,torch.rect.x, torch.rect.y);
+				torch.lightOn=true;
+			}
+			else {
+				torch.lightOn=false;
+				torch.lightReset=false;
+			}
+		}
+		else batch.draw(torch.img,torch.rect.x, torch.rect.y);
 		batch.end();
 		rayHandler.updateAndRender();
-		light.setPosition(player.rect.x+player.rect.width/2, player.rect.y+player.rect.height/2);
 
 		//not affected by light
 		batch.begin();
@@ -105,14 +124,29 @@ public class DungeonGame extends ApplicationAdapter {
 		for(int i=0; i<player.hp; i++){
 			batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
 		}
+
+		//inventory
 		batch.draw(playerInv.img,playerInv.rect.x,playerInv.rect.y);
 		batch.draw(invPointer.img,1015+player.currentSlot*50,invPointer.rect.y);
+		for(int i=0; i<5; i++){
+			if(player.inventory[i]==1) {
+				toDraw=new Texture(Gdx.files.internal("torch-icon.png"));
+				batch.draw(toDraw, 1015+i*50, playerInv.rect.y);
+			}
+		}
+
 		batch.end();
 
 		player.checkForInput();
 		//player.borderCheck();
 		for(int i=0; i<40; i++){
 			stone[i].collisionCheck();
+		}
+		torch.animation();
+		if(torch.slot==5) torch.pickUpCheck();
+		else {
+			torch.rect.x=player.rect.x-torch.rect.width;
+			torch.rect.y=player.rect.y;
 		}
 	}
 	
@@ -129,5 +163,6 @@ public class DungeonGame extends ApplicationAdapter {
 		}
 		playerInv.img.dispose();
 		invPointer.img.dispose();
+		torch.img.dispose();
 	}
 }

@@ -9,6 +9,9 @@ public class Entity {
     public int movingSpeed;
     public int hp;
 
+    public Entity(){
+        rect = new Rectangle();
+    }
     public void walkingAnimation(){
 
     }

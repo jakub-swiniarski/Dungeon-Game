@@ -1,5 +1,6 @@
 package com.dungeongame.classes.entities;
 
+import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,19 +8,22 @@ import com.badlogic.gdx.graphics.Texture;
 import java.awt.*;
 
 public class Player extends Entity {
-    public int[] inventory;
-    public int currentSlot;
+    public static int[] inventory;
+    public static int currentSlot;
+    public PointLight[] light = new PointLight[2];
 
     public Player(){
         hp=5;
-        inventory = new int[10];
-        rect = new Rectangle();
+        inventory = new int[5];
         rect.width = 80;
         rect.height = 80;
         rect.x = 1280/2-rect.width/2;
         rect.y = 720/2-rect.height/2;
         movingSpeed = 250;
         img = new Texture(Gdx.files.internal("player.png"));
+        for(int i=0; i<5; i++){
+            inventory[i] = 0;
+        }
     }
     public void checkForInput(){
         //movement
