@@ -1,10 +1,16 @@
 package com.dungeongame;
 
+import box2dLight.PointLight;
+import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeongame.classes.entities.Player;
 import com.dungeongame.classes.blocks.Stone;
@@ -15,6 +21,10 @@ public class DungeonGame extends ApplicationAdapter {
 	Texture background;
 	BitmapFont font;
 	Stone[] stone = new Stone[40];
+	World world;
+	RayHandler rayHandler;
+	Stage stage;
+	PointLight light;
 	
 	@Override
 	public void create () {
@@ -22,7 +32,7 @@ public class DungeonGame extends ApplicationAdapter {
 		player = new Player();
 		background = new Texture(Gdx.files.internal("background.png"));
 		font=new BitmapFont();
-		font.setColor(0,0,0,255);
+		font.setColor(255,255,255,255);
 		for(int i=0; i<40; i++){
 			stone[i] = new Stone();
 		}
@@ -51,6 +61,12 @@ public class DungeonGame extends ApplicationAdapter {
 		stone[37].rect.y=480;
 		stone[38].rect.y=80;
 		stone[39].rect.y=160;
+
+		stage = new Stage();
+		world = new World(new Vector2(0,0),false);
+		rayHandler = new RayHandler(world);
+		rayHandler.setCombinedMatrix(stage.getCamera().combined);
+		light = new PointLight(rayHandler,1000, Color.ORANGE,500,player.rect.x, player.rect.y);
 	}
 
 	@Override
@@ -62,8 +78,10 @@ public class DungeonGame extends ApplicationAdapter {
 		for(int i=0; i<40; i++){
 			batch.draw(stone[i].img,stone[i].rect.x, stone[i].rect.y);
 		}
-		font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 715);
+		//font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 715);
 		batch.end();
+		rayHandler.updateAndRender();
+		light.setPosition(player.rect.x+player.rect.width/2, player.rect.y+player.rect.height/2);
 		player.checkForInput();
 		//player.borderCheck();
 		for(int i=0; i<40; i++){
