@@ -2,6 +2,7 @@ package com.dungeongame.classes.blocks;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.dungeongame.classes.entities.Entity;
+import com.dungeongame.classes.entities.Player;
 
 import java.awt.*;
 

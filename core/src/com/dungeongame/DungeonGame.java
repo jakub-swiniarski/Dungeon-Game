@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeongame.classes.entities.Player;
 import com.dungeongame.classes.blocks.Stone;
 import com.dungeongame.classes.ui.Heart;
+import com.dungeongame.classes.ui.Inventory;
+import com.dungeongame.classes.ui.InventoryPointer;
 
 public class DungeonGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -27,7 +29,9 @@ public class DungeonGame extends ApplicationAdapter {
 	Stage stage;
 	PointLight light;
 	Heart[] heart = new Heart[5];
-	
+	Inventory playerInv;
+	InventoryPointer invPointer;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -70,6 +74,11 @@ public class DungeonGame extends ApplicationAdapter {
 			heart[i].rect.x=10+i*heart[i].rect.width;
 		}
 
+		playerInv = new Inventory();
+
+		invPointer = new InventoryPointer();
+
+		//lightning
 		stage = new Stage();
 		world = new World(new Vector2(0,0),false);
 		rayHandler = new RayHandler(world);
@@ -89,13 +98,17 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.end();
 		rayHandler.updateAndRender();
 		light.setPosition(player.rect.x+player.rect.width/2, player.rect.y+player.rect.height/2);
+
 		//not affected by light
 		batch.begin();
 		font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 20);
 		for(int i=0; i<player.hp; i++){
 			batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
 		}
+		batch.draw(playerInv.img,playerInv.rect.x,playerInv.rect.y);
+		batch.draw(invPointer.img,765+player.currentSlot*50,invPointer.rect.y);
 		batch.end();
+
 		player.checkForInput();
 		//player.borderCheck();
 		for(int i=0; i<40; i++){
@@ -114,5 +127,7 @@ public class DungeonGame extends ApplicationAdapter {
 		for(int i=0; i<5; i++){
 			heart[i].img.dispose();
 		}
+		playerInv.img.dispose();
+		invPointer.img.dispose();
 	}
 }
