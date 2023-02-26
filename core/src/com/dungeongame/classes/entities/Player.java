@@ -11,6 +11,7 @@ public class Player extends Entity {
     private int[] inventory;
 
     public Player(){
+        hp=5;
         inventory = new int[10];
         rect = new Rectangle();
         rect.x = 500;

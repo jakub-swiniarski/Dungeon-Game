@@ -7,6 +7,7 @@ public class Entity {
     public static Rectangle rect;
     public Texture img;
     public int movingSpeed;
+    public int hp;
 
     public void walkingAnimation(){
 
