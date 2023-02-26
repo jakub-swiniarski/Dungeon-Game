@@ -10,7 +10,7 @@ public class InventoryPointer extends UI{
         rect = new Rectangle();
         rect.width = 50;
         rect.height = 50;
-        rect.x = 765;
+        rect.x = 1015;
         rect.y = 600;
         img = new Texture(Gdx.files.internal("inventory-pointer.png"));
     }

@@ -8,7 +8,7 @@ import java.awt.*;
 public class Inventory extends UI{
     public Inventory(){
         rect = new Rectangle();
-        rect.width = 500;
+        rect.width = 250;
         rect.height = 50;
         rect.x = 1280 - rect.width - 15;
         rect.y = 720 - rect.height - 15;

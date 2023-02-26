@@ -37,16 +37,11 @@ public class Player extends Entity {
         }
 
         //inventory
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_0)) currentSlot=9;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) currentSlot=0;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) currentSlot=1;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) currentSlot=2;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) currentSlot=3;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) currentSlot=4;
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_6)) currentSlot=5;
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_7)) currentSlot=6;
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_8)) currentSlot=7;
-        if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_9)) currentSlot=8;
     }
     public void borderCheck(){
         if(rect.x < 0) {

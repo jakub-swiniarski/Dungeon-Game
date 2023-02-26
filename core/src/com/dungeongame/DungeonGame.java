@@ -106,7 +106,7 @@ public class DungeonGame extends ApplicationAdapter {
 			batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
 		}
 		batch.draw(playerInv.img,playerInv.rect.x,playerInv.rect.y);
-		batch.draw(invPointer.img,765+player.currentSlot*50,invPointer.rect.y);
+		batch.draw(invPointer.img,1015+player.currentSlot*50,invPointer.rect.y);
 		batch.end();
 
 		player.checkForInput();
