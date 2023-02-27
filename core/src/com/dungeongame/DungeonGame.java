@@ -59,6 +59,7 @@ public class DungeonGame extends ApplicationAdapter {
 		worldCam.position.set(0,0, 0);
 
 		room = new Room();
+		room.containsPlayer=true;
 
 		//lightning
 		stage = new Stage();
@@ -126,6 +127,7 @@ public class DungeonGame extends ApplicationAdapter {
 			torch.rect.x=player.rect.x-torch.rect.width;
 			torch.rect.y=player.rect.y;
 		}
+		room.borderCheck();
 	}
 	
 	@Override

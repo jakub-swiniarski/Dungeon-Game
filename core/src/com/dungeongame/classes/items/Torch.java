@@ -2,7 +2,6 @@ package com.dungeongame.classes.items;
 
 import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.dungeongame.classes.entities.Player;
 
@@ -57,17 +56,15 @@ public class Torch extends Item {
         if(!lightOn) brightness=0;
     }
 
-    public boolean pickUpCheck() {
+    public void pickUpCheck() {
         if (Player.rect.y + Player.rect.height > rect.y && Player.rect.y < rect.y + rect.height) {
             //left side
             if (Player.rect.x + Player.rect.width > rect.x && Player.rect.x + Player.rect.width < rect.x + 5) {
                 addToInv();
-                return true;
             }
             //right side
             if (Player.rect.x < rect.x + rect.width && Player.rect.x > rect.x + rect.width - 5) {
                 addToInv();
-                return true;
             }
         }
 
@@ -75,14 +72,11 @@ public class Torch extends Item {
             //bottom side
             if (Player.rect.y + Player.rect.height > rect.y && Player.rect.y + Player.rect.height < rect.y + 5) {
                 addToInv();
-                return true;
             }
             //top side
             if (Player.rect.y < rect.y + rect.height && Player.rect.y > rect.y + rect.height - 5) {
                 addToInv();
-                return true;
             }
         }
-        return false;
     }
 }
