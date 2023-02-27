@@ -14,18 +14,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeongame.classes.entities.Player;
-import com.dungeongame.classes.blocks.Stone;
 import com.dungeongame.classes.items.Torch;
 import com.dungeongame.classes.ui.Heart;
 import com.dungeongame.classes.ui.Inventory;
 import com.dungeongame.classes.ui.InventoryPointer;
+import com.dungeongame.classes.world.Room;
 
 public class DungeonGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Player player;
-	Texture background;
 	BitmapFont font;
-	Stone[] stone = new Stone[40];
 	World world;
 	RayHandler rayHandler;
 	Stage stage;
@@ -36,6 +34,7 @@ public class DungeonGame extends ApplicationAdapter {
 	Texture toDraw;
 	OrthographicCamera playerCam;
 	OrthographicCamera worldCam;
+	Room room;
 
 	@Override
 	public void create () {
@@ -43,37 +42,8 @@ public class DungeonGame extends ApplicationAdapter {
 		worldCam = new OrthographicCamera(1280,720 * (16/9));
 		batch = new SpriteBatch();
 		player = new Player();
-		background = new Texture(Gdx.files.internal("background.png"));
 		font=new BitmapFont();
 		font.setColor(255,255,255,255);
-		for(int i=0; i<40; i++){
-			stone[i] = new Stone();
-		}
-		for(int i=0; i<32; i++){
-			if(i<16){
-				stone[i].rect.y=720-stone[i].rect.height;
-				stone[i].rect.x=i*stone[i].rect.width;
-			}
-			else{
-				stone[i].rect.y=0;
-				stone[i].rect.x=(i-16)*stone[i].rect.width;
-			}
-		}
-		for(int i=32; i<36; i++){
-			stone[i].rect.x=0;
-		}
-		stone[32].rect.y=560;
-		stone[33].rect.y=480;
-		stone[34].rect.y=80;
-		stone[35].rect.y=160;
-
-		for(int i=36; i<40; i++){
-			stone[i].rect.x=1280-stone[i].rect.width;
-		}
-		stone[36].rect.y=560;
-		stone[37].rect.y=480;
-		stone[38].rect.y=80;
-		stone[39].rect.y=160;
 
 		for(int i=0; i<5; i++){
 			heart[i] = new Heart();
@@ -87,6 +57,8 @@ public class DungeonGame extends ApplicationAdapter {
 		invPointer = new InventoryPointer();
 
 		worldCam.position.set(0,0, 0);
+
+		room = new Room();
 
 		//lightning
 		stage = new Stage();
@@ -103,10 +75,7 @@ public class DungeonGame extends ApplicationAdapter {
 		playerCam.position.set(player.rect.x,player.rect.y,0);
 		playerCam.update();
 		batch.begin();
-		batch.draw(background, 0, 0);
-		for(int i=0; i<40; i++){
-			batch.draw(stone[i].img,stone[i].rect.x, stone[i].rect.y);
-		}
+		batch.draw(room.img, room.rect.x, room.rect.y);
 		batch.draw(player.img,player.rect.x, player.rect.y);
 		if(torch.slot!=5){
 			if(torch.slot==player.currentSlot){
@@ -151,9 +120,6 @@ public class DungeonGame extends ApplicationAdapter {
 
 		player.checkForInput();
 		//player.borderCheck();
-		for(int i=0; i<40; i++){
-			stone[i].collisionCheck();
-		}
 		torch.animation();
 		if(torch.slot==5) torch.pickUpCheck();
 		else {
@@ -165,11 +131,8 @@ public class DungeonGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		background.dispose();
+		room.img.dispose();
 		player.img.dispose();
-		for(int i=0; i<40; i++){
-			stone[i].img.dispose();
-		}
 		for(int i=0; i<5; i++){
 			heart[i].img.dispose();
 		}

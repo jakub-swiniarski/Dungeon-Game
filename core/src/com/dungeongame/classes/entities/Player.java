@@ -4,11 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.awt.*;
+
 public class Player extends Entity {
+    public static Rectangle rect;
     public static int[] inventory;
     public static int currentSlot;
 
     public Player(){
+        rect=new Rectangle();
         hp=5;
         inventory = new int[5];
         rect.width = 80;
