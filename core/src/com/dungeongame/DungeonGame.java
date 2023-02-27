@@ -5,6 +5,7 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,9 +34,13 @@ public class DungeonGame extends ApplicationAdapter {
 	InventoryPointer invPointer;
 	Torch torch;
 	Texture toDraw;
+	OrthographicCamera playerCam;
+	OrthographicCamera worldCam;
 
 	@Override
 	public void create () {
+		playerCam = new OrthographicCamera(1280,720 * (16/9));
+		worldCam = new OrthographicCamera(1280,720 * (16/9));
 		batch = new SpriteBatch();
 		player = new Player();
 		background = new Texture(Gdx.files.internal("background.png"));
@@ -81,19 +86,22 @@ public class DungeonGame extends ApplicationAdapter {
 		playerInv = new Inventory();
 		invPointer = new InventoryPointer();
 
+		worldCam.position.set(0,0, 0);
+
 		//lightning
 		stage = new Stage();
 		world = new World(new Vector2(0,0),false);
 		rayHandler = new RayHandler(world);
-		rayHandler.setCombinedMatrix(stage.getCamera().combined);
+		rayHandler.setCombinedMatrix(playerCam.combined);
 		torch.light = new PointLight(rayHandler,1000, Color.ORANGE,torch.brightness, 9999,9999);
-		//player.light[0] = new PointLight(rayHandler,1000, Color.WHITE,player.rect.x, player.rect.y);
-		//player.light[1] = new PointLight(rayHandler,1000, Color.WHITE,player.rect.x+10, player.rect.y);
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
+		batch.setProjectionMatrix(playerCam.combined);
+		playerCam.position.set(player.rect.x,player.rect.y,0);
+		playerCam.update();
 		batch.begin();
 		batch.draw(background, 0, 0);
 		for(int i=0; i<40; i++){
@@ -108,16 +116,21 @@ public class DungeonGame extends ApplicationAdapter {
 				}
 				batch.draw(torch.img,torch.rect.x, torch.rect.y);
 				torch.lightOn=true;
+				rayHandler.setCombinedMatrix(playerCam.combined);
 			}
 			else {
 				torch.lightOn=false;
 				torch.lightReset=false;
 			}
 		}
-		else batch.draw(torch.img,torch.rect.x, torch.rect.y);
+		else {
+			batch.draw(torch.img,torch.rect.x, torch.rect.y);
+			rayHandler.setCombinedMatrix(playerCam.combined);
+		}
 		batch.end();
 		rayHandler.updateAndRender();
 
+		batch.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
 		//not affected by light
 		batch.begin();
 		font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 20);
@@ -134,7 +147,6 @@ public class DungeonGame extends ApplicationAdapter {
 				batch.draw(toDraw, 1015+i*50, playerInv.rect.y);
 			}
 		}
-
 		batch.end();
 
 		player.checkForInput();

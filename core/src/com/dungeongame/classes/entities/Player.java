@@ -1,16 +1,12 @@
 package com.dungeongame.classes.entities;
 
-import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 
-import java.awt.*;
-
 public class Player extends Entity {
     public static int[] inventory;
     public static int currentSlot;
-    public PointLight[] light = new PointLight[2];
 
     public Player(){
         hp=5;
