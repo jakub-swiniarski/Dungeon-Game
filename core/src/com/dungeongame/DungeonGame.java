@@ -149,5 +149,12 @@ public class DungeonGame extends ApplicationAdapter {
 		invPointer.img.dispose();
 		torch.img.dispose();
 		generator.dispose();
+		font24.dispose();
+		torch.light.dispose();
+		world.dispose();
+		stage.dispose();
+		rayHandler.dispose();
+		toDraw.dispose();
+		torch.icon.dispose();
 	}
 }
