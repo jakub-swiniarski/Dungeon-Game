@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,6 +36,9 @@ public class DungeonGame extends ApplicationAdapter {
 	OrthographicCamera playerCam;
 	OrthographicCamera worldCam;
 	Room room;
+	FreeTypeFontGenerator generator;
+	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+	BitmapFont font24;
 
 	@Override
 	public void create () {
@@ -42,8 +46,6 @@ public class DungeonGame extends ApplicationAdapter {
 		worldCam = new OrthographicCamera(1280,720 * (16/9));
 		batch = new SpriteBatch();
 		player = new Player();
-		font=new BitmapFont();
-		font.setColor(255,255,255,255);
 
 		for(int i=0; i<5; i++){
 			heart[i] = new Heart();
@@ -65,7 +67,13 @@ public class DungeonGame extends ApplicationAdapter {
 		world = new World(new Vector2(0,0),false);
 		rayHandler = new RayHandler(world);
 		rayHandler.setCombinedMatrix(playerCam.combined);
-		torch.light = new PointLight(rayHandler,1000, Color.ORANGE,torch.brightness, 9999,9999);
+		torch.light = new PointLight(rayHandler,50, Color.ORANGE,torch.brightness, 9999,9999);
+
+		//font
+		generator = new FreeTypeFontGenerator(Gdx.files.internal("font.otf"));
+		parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 24;
+		font24 = generator.generateFont(parameter);
 	}
 
 	@Override
@@ -102,7 +110,7 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
 		//not affected by light
 		batch.begin();
-		font.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 20);
+		font24.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 20);
 		for(int i=0; i<player.hp; i++){
 			batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
 		}
@@ -140,5 +148,6 @@ public class DungeonGame extends ApplicationAdapter {
 		playerInv.img.dispose();
 		invPointer.img.dispose();
 		torch.img.dispose();
+		generator.dispose();
 	}
 }
