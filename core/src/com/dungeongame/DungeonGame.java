@@ -35,15 +35,15 @@ public class DungeonGame extends ApplicationAdapter {
 	Texture toDraw;
 	OrthographicCamera playerCam;
 	OrthographicCamera worldCam;
-	Room room;
+	Room[] room = new Room[9];
 	FreeTypeFontGenerator generator;
 	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 	BitmapFont font24;
 
 	@Override
 	public void create () {
-		playerCam = new OrthographicCamera(1280,720 * (16/9));
-		worldCam = new OrthographicCamera(1280,720 * (16/9));
+		playerCam = new OrthographicCamera(1280,720);
+		worldCam = new OrthographicCamera(1280,720);
 		batch = new SpriteBatch();
 		player = new Player();
 
@@ -60,7 +60,21 @@ public class DungeonGame extends ApplicationAdapter {
 
 		worldCam.position.set(0,0, 0);
 
-		room = new Room();
+		for(int i=0; i<9; i++){
+			room[i]=new Room();
+		}
+		for(int i=0; i<3; i++){
+			room[i].rect.x=-1280+1280*i;
+			room[i].rect.y=-720;
+		}
+		for(int i=3; i<6; i++){
+			room[i].rect.x=-1280+1280*(i-3);
+			room[i].rect.y=0;
+		}
+		for(int i=6; i<9; i++){
+			room[i].rect.x=-1280+1280*(i-6);
+			room[i].rect.y=720;
+		}
 
 		//lightning
 		stage = new Stage();
@@ -82,8 +96,11 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.setProjectionMatrix(playerCam.combined);
 		playerCam.position.set(player.rect.x,player.rect.y,0);
 		playerCam.update();
+		//affected by light
 		batch.begin();
-		batch.draw(room.img, room.rect.x, room.rect.y);
+		for(int i=0; i<9; i++){
+			batch.draw(room[i].img,room[i].rect.x,room[i].rect.y);
+		}
 		batch.draw(player.img,player.rect.x, player.rect.y);
 		if(torch.slot!=5){
 			if(torch.slot==player.currentSlot){
@@ -134,13 +151,14 @@ public class DungeonGame extends ApplicationAdapter {
 			torch.rect.x=player.rect.x-torch.rect.width;
 			torch.rect.y=player.rect.y;
 		}
-		room.borderCheck();
+		for(int i=0; i<9; i++){
+			room[i].borderCheck();
+		}
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		room.img.dispose();
 		player.img.dispose();
 		for(int i=0; i<5; i++){
 			heart[i].img.dispose();
@@ -156,5 +174,8 @@ public class DungeonGame extends ApplicationAdapter {
 		rayHandler.dispose();
 		toDraw.dispose();
 		torch.icon.dispose();
+		for(int i=0; i<9; i++){
+			room[i].img.dispose();
+		}
 	}
 }

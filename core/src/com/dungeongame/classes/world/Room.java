@@ -7,7 +7,7 @@ import com.dungeongame.classes.entities.Player;
 
 public class Room {
     public Rectangle rect;
-    public Texture img;
+    public static Texture img;
 
     public Room(){
         rect = new Rectangle();
