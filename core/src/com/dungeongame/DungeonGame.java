@@ -59,7 +59,6 @@ public class DungeonGame extends ApplicationAdapter {
 		worldCam.position.set(0,0, 0);
 
 		room = new Room();
-		room.containsPlayer=true;
 
 		//lightning
 		stage = new Stage();
