@@ -55,28 +55,4 @@ public class Torch extends Item {
         }
         if(!lightOn) brightness=0;
     }
-
-    public void pickUpCheck() {
-        if (Player.rect.y + Player.rect.height > rect.y && Player.rect.y < rect.y + rect.height) {
-            //left side
-            if (Player.rect.x + Player.rect.width > rect.x && Player.rect.x + Player.rect.width < rect.x + 5) {
-                addToInv();
-            }
-            //right side
-            if (Player.rect.x < rect.x + rect.width && Player.rect.x > rect.x + rect.width - 5) {
-                addToInv();
-            }
-        }
-
-        if (Player.rect.x + Player.rect.width > rect.x && Player.rect.x < rect.x + rect.width) {
-            //bottom side
-            if (Player.rect.y + Player.rect.height > rect.y && Player.rect.y + Player.rect.height < rect.y + 5) {
-                addToInv();
-            }
-            //top side
-            if (Player.rect.y < rect.y + rect.height && Player.rect.y > rect.y + rect.height - 5) {
-                addToInv();
-            }
-        }
-    }
 }
