@@ -175,13 +175,13 @@ public class DungeonGame extends ApplicationAdapter {
 		torch.light.dispose();
 		world.dispose();
 		stage.dispose();
-		rayHandler.dispose();
+		//rayHandler.dispose();
 		toDraw.dispose();
 		torch.icon.dispose();
 		for(int i=0; i<9; i++) {
 			room[i].img.dispose();
 			for(int j=0; j<room[i].chestAmount; j++){
-				batch.draw(room[i].chest[j].img,room[i].chest[j].rect.x,room[i].chest[j].rect.y);
+				room[i].chest[j].img.dispose();
 			}
 		}
 	}
