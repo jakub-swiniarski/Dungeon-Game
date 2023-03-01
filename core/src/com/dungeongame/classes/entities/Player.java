@@ -47,7 +47,7 @@ public class Player extends Entity {
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) currentSlot=3;
         if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) currentSlot=4;
     }
-    public void borderCheck(){
+    /*public void borderCheck(){
         if(rect.x < 0) {
             rect.x=0;
         }
@@ -60,5 +60,5 @@ public class Player extends Entity {
         if(rect.y > 720-rect.height){
             rect.y=720-rect.height;
         }
-    }
+    }*/
 }

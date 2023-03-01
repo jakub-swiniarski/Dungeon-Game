@@ -1,7 +1,6 @@
 package com.dungeongame.classes.blocks;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.dungeongame.classes.entities.Entity;
 
 import java.awt.*;
 
@@ -11,32 +10,12 @@ public class Block {
 
     public Block(){
         rect = new Rectangle();
-        rect.x = 9999;
-        rect.y = 9999;
-        rect.width = 80;
-        rect.height = 80;
+        rect.width=80;
+        rect.height=80;
+        rect.x=9999;
+        rect.y=9999;
     }
-    public void collisionCheck(){
-        if(Entity.rect.y+Entity.rect.height > rect.y && Entity.rect.y < rect.y+rect.height){
-            //left side
-            if(Entity.rect.x+Entity.rect.width>rect.x && Entity.rect.x+Entity.rect.width<rect.x+5){
-                Entity.rect.x = rect.x - Entity.rect.width;
-            }
-            //right side
-            if(Entity.rect.x<rect.x+rect.width && Entity.rect.x>rect.x+rect.width-5){
-                Entity.rect.x=rect.x+rect.width;
-            }
-        }
-
-        if(Entity.rect.x+Entity.rect.width > rect.x && Entity.rect.x < rect.x+rect.width){
-            //bottom side
-            if(Entity.rect.y+Entity.rect.height>rect.y && Entity.rect.y+Entity.rect.height<rect.y+5){
-                Entity.rect.y = rect.y-Entity.rect.height;
-            }
-            //top side
-            if(Entity.rect.y<rect.y+rect.height && Entity.rect.y>rect.y+rect.height-5){
-                Entity.rect.y=rect.y+rect.height;
-            }
-        }
+    public boolean collisionCheck(){ //return value will be used to determine if the chest should be opened
+        return false;
     }
 }

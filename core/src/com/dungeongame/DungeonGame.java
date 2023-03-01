@@ -75,6 +75,9 @@ public class DungeonGame extends ApplicationAdapter {
 			room[i].rect.x=-1280+1280*(i-6);
 			room[i].rect.y=720;
 		}
+		for(int i=0; i<9; i++){
+			room[i].generateContent();
+		}
 
 		//lightning
 		stage = new Stage();
@@ -100,6 +103,9 @@ public class DungeonGame extends ApplicationAdapter {
 		batch.begin();
 		for(int i=0; i<9; i++){
 			batch.draw(room[i].img,room[i].rect.x,room[i].rect.y);
+			for(int j=0; j<room[i].chestAmount; j++){
+				batch.draw(room[i].chest[j].img,room[i].chest[j].rect.x,room[i].chest[j].rect.y);
+			}
 		}
 		batch.draw(player.img,player.rect.x, player.rect.y);
 		if(torch.slot!=5){
@@ -160,9 +166,7 @@ public class DungeonGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		player.img.dispose();
-		for(int i=0; i<5; i++){
-			heart[i].img.dispose();
-		}
+		for(int i=0; i<5; i++) heart[i].img.dispose();
 		playerInv.img.dispose();
 		invPointer.img.dispose();
 		torch.img.dispose();
@@ -174,8 +178,11 @@ public class DungeonGame extends ApplicationAdapter {
 		rayHandler.dispose();
 		toDraw.dispose();
 		torch.icon.dispose();
-		for(int i=0; i<9; i++){
+		for(int i=0; i<9; i++) {
 			room[i].img.dispose();
+			for(int j=0; j<room[i].chestAmount; j++){
+				batch.draw(room[i].chest[j].img,room[i].chest[j].rect.x,room[i].chest[j].rect.y);
+			}
 		}
 	}
 }
