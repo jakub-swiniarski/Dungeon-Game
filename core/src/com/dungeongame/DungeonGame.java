@@ -24,7 +24,6 @@ import com.dungeongame.classes.world.Room;
 public class DungeonGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Player player;
-	BitmapFont font;
 	World world;
 	RayHandler rayHandler;
 	Stage stage;
@@ -42,7 +41,7 @@ public class DungeonGame extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		playerCam = new OrthographicCamera(1280,720);
+		playerCam = new OrthographicCamera(1280*2,720*2);
 		worldCam = new OrthographicCamera(1280,720);
 		batch = new SpriteBatch();
 		player = new Player();
@@ -59,6 +58,7 @@ public class DungeonGame extends ApplicationAdapter {
 		invPointer = new InventoryPointer();
 
 		worldCam.position.set(0,0, 0);
+
 
 		for(int i=0; i<9; i++){
 			room[i]=new Room();
@@ -128,7 +128,7 @@ public class DungeonGame extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(playerCam.combined);
 		}
 		batch.end();
-		rayHandler.updateAndRender();
+		//rayHandler.updateAndRender();
 
 		batch.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
 		//not affected by light
@@ -159,6 +159,9 @@ public class DungeonGame extends ApplicationAdapter {
 		}
 		for(int i=0; i<9; i++){
 			room[i].borderCheck();
+			for(int j=0; j<room[i].chestAmount; j++){
+				room[i].chest[j].collisionCheck();
+			}
 		}
 	}
 	
