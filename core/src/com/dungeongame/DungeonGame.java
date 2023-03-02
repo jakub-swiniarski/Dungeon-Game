@@ -161,6 +161,10 @@ public class DungeonGame extends ApplicationAdapter {
 			room[i].borderCheck();
 			for(int j=0; j<room[i].chestAmount; j++){
 				room[i].chest[j].collisionCheck();
+				if(room[i].chest[j].collisionCheck()){
+					room[i].chest[j].rect.x=9999;
+					room[i].chest[j].rect.y=9999;
+				}
 			}
 		}
 	}
