@@ -6,7 +6,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -15,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.dungeongame.classes.entities.Player;
+import com.dungeongame.classes.items.IronSword;
 import com.dungeongame.classes.items.Torch;
 import com.dungeongame.classes.ui.Heart;
 import com.dungeongame.classes.ui.Inventory;
@@ -31,17 +31,17 @@ public class DungeonGame extends ApplicationAdapter {
 	Inventory playerInv;
 	InventoryPointer invPointer;
 	Torch torch;
-	Texture toDraw;
 	OrthographicCamera playerCam;
 	OrthographicCamera worldCam;
 	Room[] room = new Room[9];
 	FreeTypeFontGenerator generator;
 	FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 	BitmapFont font24;
+	IronSword[] ironSword = new IronSword[3];
 
 	@Override
 	public void create () {
-		playerCam = new OrthographicCamera(1280*2,720*2);
+		playerCam = new OrthographicCamera(1280,720);
 		worldCam = new OrthographicCamera(1280,720);
 		batch = new SpriteBatch();
 		player = new Player();
@@ -53,6 +53,9 @@ public class DungeonGame extends ApplicationAdapter {
 		}
 
 		torch = new Torch();
+		for(int i=0; i<ironSword.length; i++){
+			ironSword[i] = new IronSword();
+		}
 
 		playerInv = new Inventory();
 		invPointer = new InventoryPointer();
@@ -60,9 +63,7 @@ public class DungeonGame extends ApplicationAdapter {
 		worldCam.position.set(0,0, 0);
 
 
-		for(int i=0; i<9; i++){
-			room[i]=new Room();
-		}
+		for(int i=0; i<9; i++) room[i]=new Room();
 		for(int i=0; i<3; i++){
 			room[i].rect.x=-1280+1280*i;
 			room[i].rect.y=-720;
@@ -75,9 +76,7 @@ public class DungeonGame extends ApplicationAdapter {
 			room[i].rect.x=-1280+1280*(i-6);
 			room[i].rect.y=720;
 		}
-		for(int i=0; i<9; i++){
-			room[i].generateContent();
-		}
+		for(int i=0; i<9; i++) room[i].generateContent();
 
 		//lightning
 		stage = new Stage();
@@ -108,6 +107,9 @@ public class DungeonGame extends ApplicationAdapter {
 			}
 		}
 		batch.draw(player.img,player.rect.x, player.rect.y);
+		for(int i=0; i< ironSword.length; i++){
+			batch.draw(ironSword[i].img,ironSword[i].rect.x,ironSword[i].rect.y);
+		}
 		if(torch.slot!=5){
 			if(torch.slot==player.currentSlot){
 				if(!torch.lightReset){
@@ -128,23 +130,19 @@ public class DungeonGame extends ApplicationAdapter {
 			rayHandler.setCombinedMatrix(playerCam.combined);
 		}
 		batch.end();
-		//rayHandler.updateAndRender();
+		rayHandler.updateAndRender();
 
 		batch.setProjectionMatrix(stage.getBatch().getProjectionMatrix());
 		//not affected by light
 		batch.begin();
 		font24.draw(batch, "FPS: "+Gdx.graphics.getFramesPerSecond(), 5, 20);
-		for(int i=0; i<player.hp; i++){
-			batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
-		}
-
+		for(int i=0; i<player.hp; i++) batch.draw(heart[i].img, heart[i].rect.x, heart[i].rect.y);
 		//inventory
 		batch.draw(playerInv.img,playerInv.rect.x,playerInv.rect.y);
 		batch.draw(invPointer.img,1015+player.currentSlot*50,invPointer.rect.y);
-		for(int i=0; i<5; i++){
+		for(int i=0; i<5; i++){	//IMPROVE THIS, YOU SHOULD USE THE ID
 			if(player.inventory[i]==1) {
-				toDraw=new Texture(Gdx.files.internal("torch-icon.png"));
-				batch.draw(toDraw, 1015+i*50, playerInv.rect.y);
+				batch.draw(torch.icon, 1015+i*50, playerInv.rect.y);
 			}
 		}
 		batch.end();
@@ -162,6 +160,14 @@ public class DungeonGame extends ApplicationAdapter {
 			for(int j=0; j<room[i].chestAmount; j++){
 				room[i].chest[j].collisionCheck();
 				if(room[i].chest[j].collisionCheck()){
+					//create a new random item
+					for(int k=0; k<ironSword.length; k++){
+						if(ironSword[k].rect.x==9999){
+							ironSword[k].rect.x=room[i].chest[j].rect.x;
+							ironSword[k].rect.y=room[i].chest[j].rect.y;
+							k=3;
+						}
+					}
 					room[i].chest[j].rect.x=9999;
 					room[i].chest[j].rect.y=9999;
 				}
@@ -182,14 +188,12 @@ public class DungeonGame extends ApplicationAdapter {
 		torch.light.dispose();
 		world.dispose();
 		stage.dispose();
-		//rayHandler.dispose();
-		toDraw.dispose();
+		rayHandler.dispose();
 		torch.icon.dispose();
 		for(int i=0; i<9; i++) {
 			room[i].img.dispose();
-			for(int j=0; j<room[i].chestAmount; j++){
-				room[i].chest[j].img.dispose();
-			}
+			for(int j=0; j<room[i].chestAmount; j++) room[i].chest[j].img.dispose();
 		}
+		for(int i=0; i< ironSword.length; i++) ironSword[i].img.dispose();
 	}
 }

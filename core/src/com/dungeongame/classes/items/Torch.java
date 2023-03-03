@@ -3,7 +3,6 @@ package com.dungeongame.classes.items;
 import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.dungeongame.classes.entities.Player;
 
 import java.awt.*;
 
