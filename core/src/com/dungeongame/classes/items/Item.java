@@ -9,7 +9,7 @@ public class Item {
     public Rectangle rect;
     public Texture img;
     public Texture icon;
-    public static int id;
+    public int id;
     public int slot;
 
     public Item(){
