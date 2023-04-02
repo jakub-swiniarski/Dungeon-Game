@@ -60,7 +60,7 @@ public class DungeonGame extends ApplicationAdapter {
 		playerInv = new Inventory();
 		invPointer = new InventoryPointer();
 
-		worldCam.position.set(0,0, 0);
+		worldCam.position.set(0,0,0);
 
 
 		for(int i=0; i<9; i++) room[i]=new Room();
